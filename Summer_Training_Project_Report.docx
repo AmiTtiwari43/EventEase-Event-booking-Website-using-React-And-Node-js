@@ -1,0 +1,215 @@
+[DOCX: FULL SUMMER TRAINING/INTERNSHIP PROJECT REPORT]
+
+---
+
+COVER PAGE
+
+SUMMER TRAINING/INTERNSHIP
+PROJECT REPORT
+(Term June-July 2025)
+
+EventEase Lite – Event Booking Platform
+
+Submitted by
+Amit Tiwari
+Registration Number: 123456789
+
+Course Code: CSE401
+
+Under the Guidance of
+Dr. Priya Sharma, Assistant Professor
+
+School of Computer Science and Engineering
+
+---
+
+CERTIFICATE
+
+This is to certify that Amit Tiwari, Registration Number 123456789, has successfully completed the Summer Training/Internship Project titled “EventEase Lite – Event Booking Platform” at the School of Computer Science and Engineering during June-July 2025, under my guidance.
+
+(Dr. Priya Sharma, Assistant Professor)
+
+---
+
+ACKNOWLEDGEMENT
+
+I would like to express my sincere gratitude to my mentor, Dr. Priya Sharma, for her invaluable guidance and support throughout my summer internship. I also thank the faculty and staff of the School of Computer Science and Engineering for providing the resources and environment necessary for this project.
+
+---
+
+TABLE OF CONTENTS
+
+I. Certificate
+II. Acknowledgement
+III. Table of Contents
+1. INTRODUCTION
+ 1.1 Company Profile
+ 1.2 Overview of Training Domain
+ 1.3 Objective of the Project
+2. TRAINING OVERVIEW
+ 2.1 Tools & Technologies Used
+ 2.2 Areas Covered During Training
+ 2.3 Daily/Weekly Work Summary
+3. PROJECT DETAILS
+ 3.1 Title of the Project
+ 3.2 Problem Definition
+ 3.3 Scope and Objectives
+ 3.4 System Requirements
+ 3.5 Architecture Diagram
+ 3.6 Data Flow / UML Diagrams
+4. IMPLEMENTATION
+ 4.1 Tools Used
+ 4.2 Methodology
+ 4.3 Modules / Screenshots
+ 4.4 Code Snippets
+5. RESULTS AND DISCUSSION
+ 5.1 Output / Report
+ 5.2 Challenges Faced
+ 5.3 Learnings
+6. CONCLUSION
+ 6.1 Summary
+
+---
+
+CHAPTER 1: INTRODUCTION
+
+1.1 COMPANY PROFILE
+EventEase Lite is a modern event booking and management platform developed as part of the summer internship at the School of Computer Science and Engineering. The project simulates a real-world SaaS product for event management companies, enabling users to book event services and providing administrators with powerful analytics and management tools.
+
+1.2 OVERVIEW OF TRAINING DOMAIN
+The training focused on full-stack web development using the MERN stack (MongoDB, Express.js, React.js, Node.js). Emphasis was placed on building secure, scalable, and user-friendly web applications with modern UI/UX, RESTful APIs, and robust authentication.
+
+1.3 OBJECTIVE OF THE PROJECT
+- To design and implement a robust, user-friendly event booking platform.
+- To provide both customers and admins with seamless, secure, and efficient workflows.
+- To gain hands-on experience in full-stack development and modern web technologies.
+
+---
+
+CHAPTER 2: TRAINING OVERVIEW
+
+2.1 TOOLS & TECHNOLOGIES USED
+- Frontend: React.js, TailwindCSS, Vite, Axios
+- Backend: Node.js, Express.js, MongoDB, Mongoose, JWT, bcryptjs
+- Other: Git, GitHub, Postman, MongoDB Atlas
+
+2.2 AREAS COVERED DURING TRAINING
+- Frontend development (React, TailwindCSS)
+- Backend API development (Express, MongoDB)
+- Authentication and authorization (JWT, bcrypt)
+- RESTful API design and testing
+- UI/UX best practices and responsive design
+- Deployment and documentation
+
+2.3 DAILY/WEEKLY WORK SUMMARY
+- Week 1: Project setup, requirements analysis, initial backend and database design. Created Mongoose models for User, Service, Booking, etc. Set up Express server and RESTful routes.
+- Week 2: Frontend scaffolding with React and TailwindCSS. Implemented authentication (register/login) and protected routes. Developed service browsing and booking UI.
+- Week 3: Built booking system with time slot selection and conflict checking. Developed admin dashboard with analytics (charts, stats). Implemented CRUD for services and bookings.
+- Week 4: Added partner application module and admin review. Enhanced UI with gradients, glassmorphism, and animations. Wrote documentation and finalized the project.
+
+---
+
+CHAPTER 3: PROJECT DETAILS
+
+3.1 TITLE OF THE PROJECT
+EventEase Lite – Event Booking Platform
+
+3.2 PROBLEM DEFINITION
+To create a platform that allows users to browse, book, and manage event services, while providing admins with analytics and full control over services, bookings, and partner applications.
+
+3.3 SCOPE AND OBJECTIVES
+- User registration, login, and profile management
+- Service browsing, searching, and booking with time slot selection
+- Admin dashboard with analytics, charts, and CRUD operations
+- Secure, scalable, and responsive design
+- Partner application and management
+
+3.4 SYSTEM REQUIREMENTS
+- Node.js v16+
+- MongoDB (local or Atlas)
+- Modern web browser (Chrome, Firefox, Edge, etc.)
+
+3.5 ARCHITECTURE DIAGRAM
+[Insert a diagram here showing: User/Browser <-> React Frontend <-> Express API <-> MongoDB]
+
+3.6 DATA FLOW / UML DIAGRAMS
+[Insert a UML or data flow diagram here showing: User -> Service Selection -> Booking Form -> API -> Database -> Admin Review]
+
+---
+
+CHAPTER 4: IMPLEMENTATION
+
+4.1 TOOLS USED
+- Visual Studio Code (IDE)
+- Postman (API testing)
+- GitHub (version control)
+- MongoDB Atlas (cloud database)
+
+4.2 METHODOLOGY
+Agile development with weekly sprints, regular code reviews, and iterative UI/UX improvements. Each feature was developed, tested, and refined before moving to the next.
+
+4.3 MODULES / SCREENSHOTS
+- User Authentication: [Insert Login Screen Screenshot]
+- Service Listing: [Insert Services Page Screenshot]
+- Booking Form: [Insert Booking Form Screenshot]
+- Admin Dashboard: [Insert Admin Dashboard Screenshot]
+- Partner Applications: [Insert Partner Applications Screenshot]
+
+4.4 CODE SNIPPETS
+Booking Creation (Express Controller):
+```
+const booking = new Booking({
+  userId: req.user._id,
+  serviceId,
+  name,
+  mobile,
+  date: bookingDate,
+  durationHours,
+  timeSlot
+});
+await booking.save();
+```
+Authentication Middleware:
+```
+const auth = async (req, res, next) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  if (!token) return res.status(401).json({ message: 'No token' });
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  req.user = await User.findById(decoded.userId).select('-password');
+  next();
+};
+```
+
+---
+
+CHAPTER 5: RESULTS AND DISCUSSION
+
+5.1 OUTPUT / REPORT
+The platform allows seamless event service booking, admin management, and partner onboarding. All features were tested and validated. The admin dashboard provides real-time analytics and booking management.
+
+5.2 CHALLENGES FACED
+- Handling time slot conflicts and preventing double bookings
+- Ensuring secure authentication and role-based access
+- Achieving a responsive and modern UI across devices
+- Integrating partner application workflow
+
+5.3 LEARNINGS
+- Full-stack MERN development and deployment
+- Real-world project workflow and agile methodology
+- Importance of UI/UX, security, and code documentation
+
+---
+
+CHAPTER 6: CONCLUSION
+
+6.1 SUMMARY
+The internship provided hands-on experience in building a modern, scalable web application. The project met all objectives and is ready for further enhancements such as payment integration, email notifications, and mobile app support.
+
+---
+
+Formatting notes:
+- Use Times New Roman, 12pt, 1.5 spacing
+- Margins: Top 1", Left 1.5", Bottom 1", Right 1"
+- Page numbers: Roman numerals for prelims, Arabic for chapters, centered in footer
+- Insert diagrams/screenshots as needed
+- Update placeholders (Name, Reg. No., Mentor, etc.) before submission 

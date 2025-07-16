@@ -1,5 +1,6 @@
 import axios from './axios';
 
+
 export const createPaymentIntent = async (bookingData) => {
   try {
     const response = await axios.post('/api/payments/create-payment-intent', bookingData);

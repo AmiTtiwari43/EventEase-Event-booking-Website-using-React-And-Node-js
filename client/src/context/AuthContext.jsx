@@ -4,6 +4,7 @@ import { getToken, getUser, logout as apiLogout } from '../api/auth';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  
   const [user, setUser] = useState(getUser());
   const [token, setToken] = useState(getToken());
 

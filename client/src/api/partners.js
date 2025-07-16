@@ -24,5 +24,6 @@ export const updatePartnerApplicationStatus = async (id, status, reviewNotes = '
     status,
     reviewNotes
   });
+  
   return response.data;
 }; 

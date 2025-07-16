@@ -14,6 +14,7 @@ export const getUserProfile = async () => {
 export const updateUserProfile = async (profileData) => {
   try {
     const response = await axios.put('/users/profile', profileData);
+    
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || 'Failed to update profile');

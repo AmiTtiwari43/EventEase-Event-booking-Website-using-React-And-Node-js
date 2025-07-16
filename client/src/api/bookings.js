@@ -1,5 +1,4 @@
 import axios from './axios';
-
 // Create a new booking
 export const createBooking = async (bookingData) => {
   try {

@@ -4,6 +4,7 @@ import { getServiceById } from '../api/services';
 import { createBooking } from '../api/bookings';
 import { getServiceReviews, addReview } from '../api/reviews';
 import ReviewItem from '../components/ReviewItem';
+import { useAuth } from '../context/AuthContext';
 
 const ServiceDetails = () => {
   const { id } = useParams();
@@ -35,6 +36,7 @@ const ServiceDetails = () => {
   });
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { user } = useAuth();
 
   // Service images for carousel
   const serviceImages = [
@@ -63,11 +65,17 @@ const ServiceDetails = () => {
   }, [id]);
 
   useEffect(() => {
+    if (!user) {
+      navigate('/login', { replace: true });
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => 
         prevIndex === serviceImages.length - 1 ? 0 : prevIndex + 1
       );
-    }, 15000);
+    }, 5000); // 5 seconds
 
     return () => clearInterval(interval);
   }, [serviceImages.length]);
@@ -87,6 +95,7 @@ const ServiceDetails = () => {
         ...bookingData
       });
 
+      // Redirect to QR code payment page with booking info
       navigate('/my-bookings');
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to create booking');
@@ -291,91 +300,88 @@ const ServiceDetails = () => {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-xl shadow-lg p-8 sticky top-6">
               <h3 className="text-2xl font-bold mb-6">Book This Service</h3>
-              
-              {error && (
-                <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-                  {error}
-                </div>
-              )}
-
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-lg font-medium text-gray-700 mb-2">Name</label>
-                  <input
-                    type="text"
-                    value={bookingData.name}
-                    onChange={(e) => setBookingData({ ...bookingData, name: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Your full name"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-lg font-medium text-gray-700 mb-2">Mobile Number</label>
-                  <input
-                    type="tel"
-                    value={bookingData.mobile}
-                    onChange={(e) => setBookingData({ ...bookingData, mobile: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Your mobile number"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-lg font-medium text-gray-700 mb-2">Date</label>
-                  <input
-                    type="date"
-                    value={bookingData.date}
-                    onChange={(e) => setBookingData({ ...bookingData, date: e.target.value })}
-                    min={new Date().toISOString().split('T')[0]}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-lg font-medium text-gray-700 mb-2">Time Slot</label>
-                  <select
-                    value={bookingData.timeSlot}
-                    onChange={e => setBookingData({ ...bookingData, timeSlot: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    required
-                  >
-                    <option value="">Select a time slot</option>
-                    {TIME_SLOTS.map(slot => (
-                      <option key={slot} value={slot}>{slot}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="border-t pt-6">
-                  <div className="flex justify-between mb-2">
-                    <span className="text-lg">Service Price:</span>
-                    <span className="text-lg font-semibold">₹{service.price.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between mb-4">
-                    <span className="text-lg">Duration:</span>
-                    <span className="text-lg font-semibold">2 hours</span>
-                  </div>
-                </div>
-
-                <button
-                  onClick={handleBooking}
-                  disabled={bookingLoading || !bookingData.date || !bookingData.name || !bookingData.mobile || !bookingData.timeSlot}
-                  className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-                >
-                  {bookingLoading ? (
-                    <div className="flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                      Processing...
+              {user && (
+                <>
+                  {error && (
+                    <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                      {error}
                     </div>
-                  ) : (
-                    'Book Now'
                   )}
-                </button>
-              </div>
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-lg font-medium text-gray-700 mb-2">Name</label>
+                      <input
+                        type="text"
+                        value={bookingData.name}
+                        onChange={(e) => setBookingData({ ...bookingData, name: e.target.value })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Your full name"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-lg font-medium text-gray-700 mb-2">Mobile Number</label>
+                      <input
+                        type="tel"
+                        value={bookingData.mobile}
+                        onChange={(e) => setBookingData({ ...bookingData, mobile: e.target.value })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Your mobile number"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-lg font-medium text-gray-700 mb-2">Date</label>
+                      <input
+                        type="date"
+                        value={bookingData.date}
+                        onChange={(e) => setBookingData({ ...bookingData, date: e.target.value })}
+                        min={new Date().toISOString().split('T')[0]}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-lg font-medium text-gray-700 mb-2">Time Slot</label>
+                      <select
+                        value={bookingData.timeSlot}
+                        onChange={e => setBookingData({ ...bookingData, timeSlot: e.target.value })}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                      >
+                        <option value="">Select a time slot</option>
+                        {TIME_SLOTS.map(slot => (
+                          <option key={slot} value={slot}>{slot}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="border-t pt-6">
+                      <div className="flex justify-between mb-2">
+                        <span className="text-lg">Service Price:</span>
+                        <span className="text-lg font-semibold">₹{service.price.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between mb-4">
+                        <span className="text-lg">Duration:</span>
+                        <span className="text-lg font-semibold">2 hours</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleBooking}
+                      disabled={bookingLoading || !bookingData.date || !bookingData.name || !bookingData.mobile || !bookingData.timeSlot}
+                      className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                    >
+                      {bookingLoading ? (
+                        <div className="flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                          Processing...
+                        </div>
+                      ) : (
+                        'Book Now'
+                      )}
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

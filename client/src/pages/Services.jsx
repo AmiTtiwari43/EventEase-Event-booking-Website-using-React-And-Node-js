@@ -33,8 +33,10 @@ const Services = () => {
     const fetchServices = async () => {
       try {
         const data = await getServices();
-        setServices(data);
-        setFilteredServices(data);
+        // Filter out Graduation services
+        const filtered = data.filter(service => service.category !== 'Graduation');
+        setServices(filtered);
+        setFilteredServices(filtered);
       } catch (error) {
         console.error('Error fetching services:', error);
       } finally {
@@ -164,7 +166,7 @@ const Services = () => {
         setCurrentImageIndex((prevIndex) => 
           prevIndex === images.length - 1 ? 0 : prevIndex + 1
         );
-      }, 15000);
+      }, 5000); // 5 seconds
 
       return () => clearInterval(interval);
     }, [images.length]);

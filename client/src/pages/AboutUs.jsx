@@ -146,23 +146,23 @@ const AboutUs = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                name: "Sarah Johnson",
+                name: "Amit Tiwari",
                 role: "Founder & CEO",
-                description: "With over 15 years of experience in event management, Sarah leads our team with passion and expertise.",
+                description: "With over 15 years of experience in event management, Amit leads our team with passion and expertise.",
                 emoji: "👩‍💼",
                 color: "from-purple-500 to-pink-500"
               },
               {
-                name: "Michael Chen",
+                name: "Nishant Kumar",
                 role: "Head of Operations",
-                description: "Michael ensures every event runs smoothly with his meticulous attention to detail.",
+                description: "Nishant ensures every event runs smoothly with his meticulous attention to detail.",
                 emoji: "👨‍💻",
                 color: "from-indigo-500 to-purple-500"
               },
               {
-                name: "Emily Rodriguez",
+                name: "Sumit Kumar",
                 role: "Creative Director",
-                description: "Emily brings creativity and innovation to every event, making each celebration unique.",
+                description: "Sumit brings creativity and innovation to every event, making each celebration unique.",
                 emoji: "🎨",
                 color: "from-pink-500 to-red-500"
               },

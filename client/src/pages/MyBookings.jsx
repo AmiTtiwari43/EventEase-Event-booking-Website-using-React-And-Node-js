@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { getUserBookings, cancelBooking } from '../api/bookings';
+import { getUserBookings, cancelBooking, requestRefund } from '../api/bookings';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate, Link } from 'react-router-dom';
 
 const MyBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { user } = useAuth();
+  const [refundRequested, setRefundRequested] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchBookings();
@@ -34,6 +37,33 @@ const MyBookings = () => {
     } catch (err) {
       setError('Failed to cancel booking');
     }
+  };
+
+  // Request refund and update UI
+  const handleRequestRefund = async (bookingId) => {
+    try {
+      await requestRefund(bookingId);
+      setRefundRequested((prev) => ({ ...prev, [bookingId]: true }));
+      // Optionally, refresh bookings to get updated refund status
+      fetchBookings();
+    } catch (err) {
+      setError('Failed to request refund');
+    }
+  };
+
+  // Add pay now handler
+  const handlePayNow = (booking) => {
+    navigate('/payment-qr', {
+      state: {
+        booking: {
+          id: booking._id,
+          serviceTitle: booking.serviceId?.title,
+          amount: booking.serviceId?.price,
+          date: booking.date,
+          time: booking.timeSlot
+        }
+      }
+    });
   };
 
   const getStatusColor = (status) => {
@@ -168,12 +198,36 @@ const MyBookings = () => {
                           Cancel Booking
                         </button>
                       )}
-                      <a
-                        href={`/services/${booking.serviceId?._id}`}
+                      {booking.status === 'cancelled' && booking.serviceId && booking.paymentStatus === 'paid' && (
+                        <>
+                          {(!booking.refund || (booking.refund.status !== 'requested' && booking.refund.status !== 'processed')) && !refundRequested[booking._id] ? (
+                            <button
+                              onClick={() => handleRequestRefund(booking._id)}
+                              className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-300 ml-2"
+                            >
+                              Request Refund
+                            </button>
+                          ) : booking.refund && booking.refund.status === 'requested' ? (
+                            <span className="text-yellow-600 ml-2">Refund Requested</span>
+                          ) : booking.refund && booking.refund.status === 'processed' ? (
+                            <span className="text-green-600 ml-2 font-semibold">Refund Successful: ₹{booking.refund.amount}</span>
+                          ) : null}
+                        </>
+                      )}
+                      {booking.status === 'confirmed' && booking.paymentStatus !== 'paid' && (
+                        <button
+                          onClick={() => handlePayNow(booking)}
+                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-300"
+                        >
+                          Pay Now
+                        </button>
+                      )}
+                      <Link
+                        to={`/services/${booking.serviceId?._id}`}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-300"
                       >
                         View Service
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

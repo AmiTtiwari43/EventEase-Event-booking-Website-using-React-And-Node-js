@@ -42,7 +42,7 @@ const Home = () => {
       setCurrentImageIndex((prevIndex) => 
         prevIndex === heroImages.length - 1 ? 0 : prevIndex + 1
       );
-    }, 15000);
+    }, 5000); // 5 seconds
 
     return () => clearInterval(interval);
   }, [heroImages.length]);
@@ -58,7 +58,7 @@ const Home = () => {
             ...prev,
             [service._id]: (prev[service._id] + 1) % service.images.length
           }));
-        }, 3000);
+        }, 5000); // 5 seconds
       }
     });
 

@@ -11,6 +11,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,14 +49,25 @@ const Register = () => {
           className="w-full p-2 mb-3 border rounded"
           required
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 mb-3 border rounded"
-          required
-        />
+        <div className="relative mb-3">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 border rounded pr-10"
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs px-2 py-1 focus:outline-none"
+            tabIndex={-1}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            {showPassword ? 'Hide' : 'Show'}
+          </button>
+        </div>
         <button type="submit" className="w-full bg-green-500 text-white p-2 rounded" disabled={loading}>
           {loading ? 'Registering...' : 'Register'}
         </button>

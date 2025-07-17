@@ -261,7 +261,7 @@ const Contact = () => {
         </div>
 
         {/* Map Section */}
-        <div className="mt-16">
+{/*         <div className="mt-16">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Find Us</h2>
           <div className="bg-gray-200 rounded-xl h-96 flex items-center justify-center">
             <div className="text-center text-gray-600">
@@ -272,7 +272,8 @@ const Contact = () => {
               <p className="text-sm">We're working on adding an interactive map to help you find us easily.</p>
             </div>
           </div>
-        </div>
+        </div> */}
+        
       </div>
     </div>
   );

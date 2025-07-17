@@ -1,6 +1,7 @@
 const Booking = require('../models/Booking');
 const Service = require('../models/Service');
 
+// Create a new booking
 exports.createBooking = async (req, res) => {
   try {
     const { serviceId, name, mobile, date, durationHours, timeSlot } = req.body;
@@ -179,5 +180,79 @@ exports.getBookingStats = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching booking statistics' });
+  }
+}; 
+
+// Refund booking (admin only)
+exports.refundBooking = async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const { amount } = req.body;
+
+    const booking = await Booking.findById(bookingId).populate('serviceId');
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+    if (booking.status !== 'cancelled') {
+      return res.status(400).json({ message: 'Only cancelled bookings can be refunded' });
+    }
+    if (booking.refund.status === 'processed') {
+      return res.status(400).json({ message: 'Booking already refunded' });
+    }
+    // Default to full refund if amount not provided
+    const refundAmount = typeof amount === 'number' ? amount : (booking.serviceId?.price || 0);
+    // TODO: Integrate with payment gateway here if needed
+    booking.refund = {
+      status: 'processed',
+      amount: refundAmount,
+      date: new Date()
+    };
+    await booking.save();
+    res.json(booking);
+  } catch (error) {
+    console.error('Refund booking error:', error);
+    res.status(500).json({ message: 'Error processing refund' });
+  }
+}; 
+
+// Mark booking as paid
+exports.markBookingPaid = async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const booking = await Booking.findByIdAndUpdate(
+      bookingId,
+      { paymentStatus: 'paid' },
+      { new: true }
+    );
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+    res.json(booking);
+  } catch (error) {
+    res.status(500).json({ message: 'Error marking booking as paid' });
+  }
+}; 
+
+// User requests a refund for a cancelled, paid booking
+exports.requestRefund = async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const booking = await Booking.findById(bookingId);
+    if (!booking) return res.status(404).json({ message: 'Booking not found' });
+    if (booking.userId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+    if (booking.status !== 'cancelled') {
+      return res.status(400).json({ message: 'Refund can only be requested for cancelled bookings' });
+    }
+    if (booking.refund && (booking.refund.status === 'requested' || booking.refund.status === 'processed')) {
+      return res.status(400).json({ message: 'Refund already requested or processed' });
+    }
+    booking.refund = { status: 'requested', amount: 0 };
+    await booking.save();
+    res.json({ message: 'Refund requested', booking });
+  } catch (error) {
+    console.error('Request refund error:', error);
+    res.status(500).json({ message: 'Error requesting refund' });
   }
 }; 

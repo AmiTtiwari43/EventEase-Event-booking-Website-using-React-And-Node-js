@@ -10,9 +10,14 @@ A modern, full-stack event management platform built with React, Node.js, and Mo
 - **Manage Bookings**: Track and manage all your event bookings
 - **User Profiles**: Personalized profiles with booking history
 - **Reviews & Ratings**: Share experiences and read reviews
+- **UPI QR Code Payment**: Pay for bookings via UPI QR code after admin confirmation
+- **Refund Requests**: Request refunds for cancelled, paid bookings (fully functional, with clear status display)
+- **Improved Navigation**: All navigation buttons and hyperlinks (including 'Contact Us') are checked and work correctly
+- **Consistent Image Transitions**: All carousels and sliders now transition every 5 seconds
+- **Show/Hide Password**: Login and Signup pages feature show/hide password buttons for better UX
 
 ### For Service Partners
-- **Partner Registration**: Easy onboarding for service providers
+- **Partner Registration**: Easy onboarding for service providers (requires login)
 - **Service Management**: Add, edit, and manage your services
 - **Booking Management**: Handle incoming booking requests
 - **Analytics Dashboard**: Track performance and earnings
@@ -22,6 +27,8 @@ A modern, full-stack event management platform built with React, Node.js, and Mo
 - **User Management**: Manage users and partners
 - **Booking Oversight**: Monitor all platform bookings
 - **Analytics**: Platform-wide statistics and insights
+- **Refund Processing**: Process and track refunds for cancelled bookings
+- **Revenue Calculation**: Revenue only includes paid, non-refunded bookings
 
 ## 🛠️ Tech Stack
 
@@ -56,17 +63,14 @@ FULL STACK DEVELOPMENT PETV88/
 │   │   ├── components/    # Reusable UI components
 │   │   ├── context/       # React context providers
 │   │   ├── pages/         # Page components
-│   │   └── main.jsx       # App entry point
-│   ├── package.json
-│   └── vite.config.js
-├── server/                 # Node.js backend
-│   ├── controllers/       # Route controllers
-│   ├── middleware/        # Custom middleware
-│   ├── models/           # MongoDB schemas
-│   ├── routes/           # API routes
-│   ├── server.js         # Server entry point
-│   └── package.json
-└── README.md
+│   │   │   ├── PartnerContact.jsx   # 'Be Our Partner' application page (login required)
+│   │   │   ├── PaymentQRCode.jsx    # UPI QR code payment page
+│   │   │   ├── MyBookings.jsx       # User bookings, refund/payment actions
+│   │   │   ├── AdminDashboard.jsx   # Admin dashboard (refunds, analytics)
+│   │   │   └── ...
+│   └── ...
+└── server/                 # Node.js backend
+    └── ...
 ```
 
 ## 🚀 Getting Started
@@ -150,22 +154,31 @@ Create a `.env` file in the server directory with the following variables:
 
 ### Authentication System
 - JWT-based authentication
-- Protected routes
+- Protected routes (booking, contact, partner, and payment pages require login)
 - User role management (User, Partner, Admin)
+- **Show/Hide Password**: Toggle password visibility in login and signup forms
 
-### Booking System
+### Booking & Payment System
 - Real-time booking management
 - Booking status tracking
-- Payment integration ready
+- UPI QR code payment (shown only after admin confirmation)
+- Payment status tracking (paid/unpaid)
+- **Refund request and processing**: User can request refund after admin cancellation and payment; refund status is shown in MyBookings (yellow for requested, green for successful)
+- Revenue analytics (only paid, non-refunded bookings count)
+
+### User Experience Improvements
+- All navigation buttons and hyperlinks are checked and work correctly
+- Consistent 5-second image transitions for all carousels/sliders
 
 ### Partner Management
-- Partner registration and approval
+- Partner registration and approval (via 'Be Our Partner' page, login required)
 - Service listing and management
 - Partner dashboard
 
 ### Admin Features
 - User and partner management
 - Booking oversight
+- Refund management
 - Platform analytics
 
 ## 🚀 Deployment

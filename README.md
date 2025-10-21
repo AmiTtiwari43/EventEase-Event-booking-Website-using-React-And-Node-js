@@ -33,7 +33,7 @@ A modern, full-stack event management platform built with React, Node.js, and Mo
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18** - Modern UI library
+- **React 19** - Modern UI library
 - **Vite** - Fast build tool and dev server
 - **Tailwind CSS** - Utility-first CSS framework
 - **Axios** - HTTP client for API calls
@@ -195,6 +195,23 @@ Create a `.env` file in the server directory with the following variables:
 1. Set up environment variables on your hosting platform
 2. Deploy the server directory
 3. Update the frontend API base URL to point to your deployed backend
+
+### Deployment environment variables
+For CORS and frontend-to-backend configuration, set the following environment variables:
+
+- `ALLOWED_ORIGINS` (server): comma-separated list of allowed front-end origins. Example:
+
+```
+ALLOWED_ORIGINS=https://your-frontend.vercel.app,https://staging.yourdomain.com,http://localhost:3001
+```
+
+- `VITE_API_URL` (client): the backend base URL used by the frontend when built for production. Example in a Vite `.env` file placed in the `client/` folder:
+
+```
+VITE_API_URL=https://your-backend.example.com/api
+```
+
+These settings ensure the production front-end can call the backend without CORS failures and that the correct backend URL is used when the app is deployed.
 
 ## 🤝 Contributing
 

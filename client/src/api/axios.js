@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api', // It will be changed to backend URL when in production
+  baseURL: 'https://event-ease-event-booking-website-us-nine.vercel.app/api', // It will be changed to backend URL when in production
 });
 
 // Attach JWT token from localStorage if available

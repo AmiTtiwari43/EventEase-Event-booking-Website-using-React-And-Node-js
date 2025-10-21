@@ -9,7 +9,9 @@ export const login = async (email, password) => {
     }
     return response.data;
   } catch (error) {
-    throw error.response?.data || error.message;
+    // normalize error to an object with a message property so callers can display it
+    const payload = error.response?.data || { message: error.message };
+    throw payload;
   }
 };
 
@@ -22,7 +24,8 @@ export const register = async (name, email, password) => {
     }
     return response.data;
   } catch (error) {
-    throw error.response?.data || error.message;
+    const payload = error.response?.data || { message: error.message };
+    throw payload;
   }
 };
 

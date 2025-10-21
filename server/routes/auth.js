@@ -1,11 +1,42 @@
-const express = require('express');
-const router = express.Router();
-const { register, login } = require('../controllers/authController');
+import axios from './axios';
 
-// Register user
-router.post('/register', register);
+export const login = async (email, password) => {
+  try {
+    const response = await axios.post('/auth/login', { email, password });
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+    }
+    return response.data;
+  } catch (error) {
+    // normalize error to an object with a message property so callers can display it
+    const payload = error.response?.data || { message: error.message };
+    throw payload;
+  }
+};
 
-// Login user
-router.post('/login', login);
+export const register = async (name, email, password) => {
+  try {
+    const response = await axios.post('/auth/register', { name, email, password });
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+    }
+    return response.data;
+  } catch (error) {
+    const payload = error.response?.data || { message: error.message };
+    throw payload;
+  }
+};
 
-module.exports = router; 
+export const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+};
+
+export const getToken = () => localStorage.getItem('token');
+
+export const getUser = () => {
+  const user = localStorage.getItem('user');
+  return user ? JSON.parse(user) : null;
+}; 
